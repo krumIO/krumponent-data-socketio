@@ -1,0 +1,156 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="socketio-imports.html">
+<!--
+`krumponent-data-socketio`
+Component for Sprocket data subscription
+
+@demo demo/index.html 
+-->
+
+<dom-module id="krumponent-data-socketio">
+  <template>
+    <style>
+      :host {
+        display: none;
+      }
+    </style>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'krumponent-data-socketio',
+
+      /**
+      * Fired when data is received from Sprocket subscription.
+      *
+      * @event data-received
+      * @param {object} data the data received
+      */
+
+      properties: {
+        /** Enable console logging for this element */
+        log: {
+          type: Boolean,
+          value: false,
+        },
+        /** Connect automatically, reconnect on changes */
+        auto: {
+          type: Boolean,
+          value: false,
+        },
+        /** Sprocket user ID */
+        authToken: {
+          type: String
+        },
+        /** Sprocket secret/token */
+        authSecret: {
+          type: String
+        },
+        /** Sprocket stream ID (temporarily a single feed per component instance) */
+        extraOptions: {
+          type: String
+        },
+        /** Last message/data received from subscription */
+        data: {
+          type: Object,
+          notify: true
+        },
+        url: {
+          type: String,
+          value: "https://localhost:9999"
+          //value: "localhost:9999"
+        },
+        _status: {
+          type: String,
+        }
+      },
+      observers: [
+        '_connnectionChanged(url, authToken, authSecret, extraOptions)',
+        // '_statusChanged(_status)'
+      ],
+
+      
+      /** Initiate connection to Sprocket */
+      connect: function(){
+        this._log("initializing connection..");
+        if(this.authToken && this.authSecret){
+          if(!this._socket){
+            this._socket = new io.connect(this.url, {secure: true, rejectUnauthorized: false});
+            // future // this._socket = io.connect(this._tempaddress, {query: 'token='+this.auth.token});
+            
+          }
+          this._socket.on('connect', function () {
+              this._status = "connected";
+              this._log(this._status);
+              this._subscribe();
+          }.bind(this));
+          this._socket.on('disconnect', function () {
+              this._status = "disconnected";
+              this._log(this._status);
+              this._cleanup();
+          }.bind(this));
+
+          
+        }
+      },
+      
+      ready: function(){
+        
+      },
+      detached: function() {
+        this.disconnect();
+      },
+
+      /** Print log message if logging is enabled */
+      _log: function(log){
+        if(this.log){
+          console.log(log);
+        }
+      },
+      /** Detect subscription changes and trigger reconnect workflow */
+      _streamChanged: function(user, secret, stream){
+        if(this._socket)
+          this.disconnect();
+        this.connect();
+      },
+      /** Detect connection status changes and handle subscription handshake */
+      _statusChanged: function(status){
+        if(status + "" == "connected")
+          this._subscribe();
+        
+        if(status + "" == "disconnected")
+          this._cleanup();
+      },
+
+      /** Initiate connection to Sprocket. Will always be called by detached. */
+      disconnect: function(){
+          this._socket.emit('unsubscribe');
+      },
+
+      _subscribe: function(){
+        //subscribe to feed
+        this._log(this._socket);
+        this._log("subscription");
+        this._socket.emit('subscribe', { token : this.authToken, secret : this.authToken, options : this.extraOptions } );
+
+        this._socket.on("complete", function(message){
+          this._log("subscription status - " + JSON.stringify(message));
+        }.bind(this));
+
+        this._socket.on("feeddata", function(message){
+          this._log(message);
+          this.set('data', message);
+        }.bind(this));
+        
+          
+      },
+      _cleanup: function(){
+        this._log("cleanup");
+        // kill the listeners
+        //this._socket.removeAllListeners("complete");
+      },
+
+    });
+  </script>
+</dom-module>
