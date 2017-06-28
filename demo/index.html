@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>krumponent-sprocket-data demo</title>
+    <title>krumponent-data-socketio demo</title>
 
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-    <link rel="import" href="../krumponent-sprocket-data.html">
+    <link rel="import" href="../krumponent-data-socketio.html">
 
     <style is="custom-style" include="demo-pages-shared-styles">
     </style>
@@ -21,14 +21,14 @@
       <demo-snippet>
         <template>
           <template is="dom-bind">
-            <krumponent-sprocket-data 
+            <krumponent-data-socketio 
               sprocket-secret="asd" 
               sprocket-user="asd" 
               sprocket-stream="5848aee9a953511f007ece3c" 
               data="{{data}}" 
               auto 
               log>
-            </krumponent-sprocket-data>
+            </krumponent-data-socketio>
             <img width="350" src="{{data.payload.data.user.profile_banner_url}}">
             <img width="100" src="{{data.payload.data.user.profile_image_url}}"><div>{{data.payload.description}}</div>
           </template>
@@ -40,13 +40,13 @@
       <demo-snippet>
         <template>
           <template is="dom-bind">
-            <krumponent-sprocket-data 
+            <krumponent-data-socketio 
               sprocket-secret="asd" 
               sprocket-user="asd" 
               sprocket-stream="5744b55a1018ec1d005d611a" 
               data="{{data}}"
               auto>
-            </krumponent-sprocket-data>
+            </krumponent-data-socketio>
             <div>{{data.payload.geoJson.coordinates.0}}</div><div>{{data.payload.geoJson.coordinates.1}}</div>
           </template>
         </template>
