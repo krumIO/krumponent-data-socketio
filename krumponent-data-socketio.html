@@ -66,7 +66,7 @@ Component for Sprocket data subscription
         }
       },
       observers: [
-        '_connnectionChanged(url, authToken, authSecret, extraOptions)',
+        '_connectionChanged(url, authToken, authSecret, extraOptions)',
         // '_statusChanged(_status)'
       ],
 
@@ -109,7 +109,7 @@ Component for Sprocket data subscription
         }
       },
       /** Detect subscription changes and trigger reconnect workflow */
-      _streamChanged: function(user, secret, stream){
+      _connectionChanged: function(user, secret, stream){
         if(this._socket)
           this.disconnect();
         this.connect();
