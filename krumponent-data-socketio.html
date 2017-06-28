@@ -109,7 +109,7 @@ Component for Sprocket data subscription
         }
       },
       /** Detect subscription changes and trigger reconnect workflow */
-      _connectionChanged: function(user, secret, stream){
+      _connectionChanged: function(user, secret, stream, options){
         if(this._socket)
           this.disconnect();
         this.connect();
@@ -125,7 +125,8 @@ Component for Sprocket data subscription
 
       /** Initiate connection to Sprocket. Will always be called by detached. */
       disconnect: function(){
-          this._socket.emit('unsubscribe');
+          if(this._socket)
+            this._socket.emit('unsubscribe');
       },
 
       _subscribe: function(){
