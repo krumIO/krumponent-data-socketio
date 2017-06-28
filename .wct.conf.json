@@ -3,6 +3,14 @@
     "sauce": {
       "disabled": false,
       "browsers": [{
+          "browserName": "firefox",
+          "platform": "Windows 10",
+          "version": ""
+        },{
+          "browserName": "chrome",
+          "platform": "Windows 10",
+          "version": ""
+        },{
           "browserName": "microsoftedge",
           "platform": "Windows 10",
           "version": ""
