@@ -82,17 +82,18 @@ Component for Sprocket data subscription
             } else {
               this._socket = new io.connect(this.url, {secure: true, rejectUnauthorized: false});
             }
+
+            this._socket.on('connect', function () {
+                this._status = "connected";
+                this._log(this._status);
+                this._subscribe();
+            }.bind(this));
+            this._socket.on('disconnect', function () {
+                this._status = "disconnected";
+                this._log(this._status);
+                this._cleanup();
+            }.bind(this));
           }
-          this._socket.on('connect', function () {
-              this._status = "connected";
-              this._log(this._status);
-              this._subscribe();
-          }.bind(this));
-          this._socket.on('disconnect', function () {
-              this._status = "disconnected";
-              this._log(this._status);
-              this._cleanup();
-          }.bind(this));
 
       },
       
@@ -102,6 +103,7 @@ Component for Sprocket data subscription
         }
       },
       detached: function() {
+        this._log("detached");
         this.disconnect();
       },
 
@@ -128,8 +130,11 @@ Component for Sprocket data subscription
 
       /** Initiate connection to Sprocket. Will always be called by detached. */
       disconnect: function(){
-          if(this._socket)
+          if(this._socket){
+            this._log("disconnect");
             this._socket.emit('unsubscribe');
+            this._socket.disconnect();
+          }
       },
 
       _subscribe: function(){
@@ -142,9 +147,10 @@ Component for Sprocket data subscription
           this._log("subscription status - " + JSON.stringify(message));
         }.bind(this));
 
-        this._socket.on("feeddata", function(message){
+        this._socket.on("data", function(message){
           this._log(message);
           this.set('data', message);
+          this.fire('data-received', message);
         }.bind(this));
         
           
@@ -152,7 +158,9 @@ Component for Sprocket data subscription
       _cleanup: function(){
         this._log("cleanup");
         // kill the listeners
-        //this._socket.removeAllListeners("complete");
+        this._socket.removeAllListeners("complete");
+        this._socket.removeAllListeners("data");
+        this._socket = undefined;
       },
 
     });
