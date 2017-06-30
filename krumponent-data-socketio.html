@@ -135,6 +135,7 @@ Component for Sprocket data subscription
             this._socket.emit('unsubscribe');
             this._socket.disconnect();
           }
+          this._socket = undefined;
       },
 
       _subscribe: function(){
@@ -160,7 +161,7 @@ Component for Sprocket data subscription
         // kill the listeners
         this._socket.removeAllListeners("complete");
         this._socket.removeAllListeners("data");
-        this._socket = undefined;
+        // this._socket = undefined;
       },
 
     });
