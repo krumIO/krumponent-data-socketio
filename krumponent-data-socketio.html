@@ -58,7 +58,7 @@ Component for Sprocket data subscription
         },
         url: {
           type: String,
-          value: "https://localhost:9999"
+          value: "http://localhost:8080"
           //value: "localhost:9999"
         },
         _status: {
@@ -74,11 +74,14 @@ Component for Sprocket data subscription
       /** Initiate connection to Sprocket */
       connect: function(){
         this._log("initializing connection..");
-        if(this.authToken && this.authSecret){
+        
           if(!this._socket){
-            this._socket = new io.connect(this.url, {secure: true, rejectUnauthorized: false});
-            // future // this._socket = io.connect(this._tempaddress, {query: 'token='+this.auth.token});
-            
+            if(this.authToken && this.authSecret){
+              //if auth then pass credentials through socket
+              // future // this._socket = io.connect(this._tempaddress, {query: 'token='+this.auth.token});
+            } else {
+              this._socket = new io.connect(this.url, {secure: true, rejectUnauthorized: false});
+            }
           }
           this._socket.on('connect', function () {
               this._status = "connected";
@@ -91,12 +94,12 @@ Component for Sprocket data subscription
               this._cleanup();
           }.bind(this));
 
-          
-        }
       },
       
       ready: function(){
-        
+        if(this.auto){
+          setTimeout(function(){this.connect()}.bind(this), 100);
+        }
       },
       detached: function() {
         this.disconnect();
