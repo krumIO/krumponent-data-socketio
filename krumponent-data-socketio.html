@@ -62,6 +62,11 @@ Component for Sprocket data subscription
           value: "//"
           //value: "localhost:9999"
         },
+        /** socket connection url. defaulted to base url */
+        path: {
+          type: String
+          //value: ""
+        },
         _status: {
           type: String,
         }
@@ -81,7 +86,8 @@ Component for Sprocket data subscription
               //if auth then pass credentials through socket
               // future // this._socket = io.connect(this._tempaddress, {query: 'token='+this.auth.token});
             } else {
-              this._socket = new io.connect(this.url, {secure: true, rejectUnauthorized: false});
+              this._socket = new io.connect(this.url, {path:this.path,  secure: true, rejectUnauthorized: false});
+              this._log(this._socket);
             }
 
             this._socket.on('connect', function () {
@@ -89,6 +95,12 @@ Component for Sprocket data subscription
                 this._log(this._status);
                 this._subscribe();
             }.bind(this));
+
+            this._socket.on('error', function (err) {
+                this._status = "error";
+                this._log(this._status, err);
+            }.bind(this));
+
             this._socket.on('disconnect', function () {
                 this._status = "disconnected";
                 this._log(this._status);
