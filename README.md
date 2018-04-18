@@ -1,4 +1,4 @@
-![Build Status](https://api.travis-ci.org/krumIO/krumponent-krumponent-data-socketio.svg?branch=master)
+[![Build Status](https://travis-ci.org/krumIO/krumponent-data-socketio.svg?branch=master)](https://travis-ci.org/krumIO/krumponent-data-socketio)
 
 [![Build Status](https://saucelabs.com/browser-matrix/krumware.svg)](https://saucelabs.com/beta/builds/a8427f8b2e4845d7a79887d2e37b987d)
 
