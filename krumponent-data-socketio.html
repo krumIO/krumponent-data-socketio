@@ -67,21 +67,30 @@ Component for Sprocket data subscription
           type: String
           //value: ""
         },
+        /** purposefully disable connection */
+        disabled: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
+        },
         _status: {
           type: String,
         }
       },
       observers: [
         '_connectionChanged(url, authToken, authSecret, extraOptions)',
+        '_pathChanged(path)',
+        '_connectionDisabled(disabled)', //for some reason this is not being triggered when a part of the observer above
         // '_statusChanged(_status)'
       ],
 
       
       /** Initiate connection to Sprocket */
       connect: function(){
-        this._log("initializing connection..");
         
-          if(!this._socket){
+          if(!this._socket && !this.disabled){
+            this._log("initializing connection..");
+
             if(this.authToken && this.authSecret){
               //if auth then pass credentials through socket
               // future // this._socket = io.connect(this._tempaddress, {query: 'token='+this.auth.token});
@@ -112,7 +121,7 @@ Component for Sprocket data subscription
       
       ready: function(){
         if(this.auto){
-          setTimeout(function(){this.connect()}.bind(this), 100);
+          setTimeout(function(){this.connect()}.bind(this), 1000);
         }
       },
       detached: function() {
@@ -127,10 +136,23 @@ Component for Sprocket data subscription
         }
       },
       /** Detect subscription changes and trigger reconnect workflow */
-      _connectionChanged: function(user, secret, stream, options){
-        if(this._socket)
-          this.disconnect();
-        this.connect();
+      _connectionChanged: function(url, secret, stream, options){
+        console.log("connection changed");
+        if(this.auto){
+          if(this._socket)
+            this.disconnect();
+          this.connect();
+        }
+      },
+      /** Detect path changes and trigger reconnect workflow */
+      _pathChanged: function(path){
+        // we shouldn't need this, but the standard multi-observer is not picking up state changes.
+        this._connectionChanged();
+      },
+      /** Detect subscription changes and trigger reconnect workflow */
+      _connectionDisabled: function(disabled){
+        // we shouldn't need this, but the standard multi-observer is not picking up state changes.
+        this._connectionChanged();
       },
       /** Detect connection status changes and handle subscription handshake */
       _statusChanged: function(status){
@@ -168,6 +190,12 @@ Component for Sprocket data subscription
         }.bind(this));
         
           
+      },
+      publish: function(subject, data) {
+        if(this._status === "connected" && !(typeof subject === 'undefined')){
+          this._log("publishing", subject, data);
+          this._socket.emit(subject, data);
+        }
       },
       _cleanup: function(){
         this._log("cleanup");
