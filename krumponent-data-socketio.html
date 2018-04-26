@@ -137,7 +137,7 @@ Component for Sprocket data subscription
       },
       /** Detect subscription changes and trigger reconnect workflow */
       _connectionChanged: function(url, secret, stream, options){
-        console.log("connection changed");
+        this._log("connection changed");
         if(this.auto){
           if(this._socket)
             this.disconnect();
