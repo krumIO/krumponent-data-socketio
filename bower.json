@@ -7,9 +7,12 @@
     "socket.io-client": "^1.7.1"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
-    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
-    "web-component-tester": "^4.0.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.24"
+    "iron-component-page": "PolymerElements/iron-component-page#1 - 2",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#1 - 2",
+    "web-component-tester": "^6.1.5"
+  },
+  "resolutions": {
+    "polymer": "^1.9.2",
+    "webcomponentsjs": "^1.0.0"
   }
 }
