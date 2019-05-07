@@ -7,6 +7,7 @@
         "url": "git://github.com/krumio/krumponent-data-socketio.git"
     },
     "devDependencies": {},
+    "version": "0.3.0",
     "dependencies": {
         "@polymer/polymer": "^2.0.0",
         "socket.io-client": "^2.2.0"
