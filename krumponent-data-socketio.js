@@ -9,10 +9,10 @@ Component for Sprocket data subscription
   from HTML and may be out of place here. Review them and
   then delete this comment!
 */
-import '../../@polymer/polymer/polymer-legacy.js';
+import '@polymer/polymer/polymer-legacy.js';
 
-import './socketio-imports.js';
-import { Polymer as Polymer$0 } from '../../@polymer/polymer/lib/legacy/polymer-fn.js';
+import io from 'socket.io-client';
+import { Polymer as Polymer$0 } from '@polymer/polymer/lib/legacy/polymer-fn.js';
 Polymer$0({
   _template: Polymer.html`
     <style>
