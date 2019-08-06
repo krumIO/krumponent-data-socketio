@@ -11,10 +11,12 @@ Component for Sprocket data subscription
 */
 import '@polymer/polymer/polymer-legacy.js';
 
-import io from 'socket.io-client';
-import { Polymer as Polymer$0 } from '@polymer/polymer/lib/legacy/polymer-fn.js';
-Polymer$0({
-  _template: Polymer.html`
+import io from '/web_modules/socket.io-client.js';
+import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+
+Polymer({
+  _template: html`
     <style>
       :host {
         display: none;
