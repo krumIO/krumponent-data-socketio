@@ -6,6 +6,7 @@
   },
   "name": "@krumio/krumponent-data-socketio",
   "devDependencies": {
+    "@pika/web": "^0.5.1",
     "@polymer/iron-component-page": "^4.0.0",
     "@polymer/iron-demo-helpers": "^3.0.0",
     "wct-browser-legacy": "^1.0.1"
@@ -14,6 +15,14 @@
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
     "socket.io-client": "^2.2.0"
+  },
+  "scripts": {
+    "prepare": "pika-web"
+  },
+  "@pika/web": {
+    "webDependencies": [
+      "socket.io-client"
+    ]
   },
   "resolutions": {
     "inherits": "2.0.3",
