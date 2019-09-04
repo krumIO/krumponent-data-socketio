@@ -108,17 +108,42 @@ Polymer({
             this._status = "connected";
             this._log(this._status);
             this._subscribe();
+            this.dispatchEvent(new CustomEvent('socket-connected', {
+                bubbles: true,
+                composed: true,
+                detail: {
+                    path: this.path,
+                    status: this._status,
+                },
+            }));
         }.bind(this));
 
         this._socket.on('error', function (err) {
             this._status = "error";
             this._log(this._status, err);
+            this.dispatchEvent(new CustomEvent('socket-error', {
+                bubbles: true,
+                composed: true,
+                detail: {
+                    path: this.path,
+                    status: this._status,
+                    error: err,
+                },
+            }));
         }.bind(this));
 
         this._socket.on('disconnect', function () {
             this._status = "disconnected";
             this._log(this._status);
             this._cleanup();
+            this.dispatchEvent(new CustomEvent('socket-disconnected', {
+                bubbles: true,
+                composed: true,
+                detail: {
+                    path: this.path,
+                    status: this._status,
+                },
+            }));
         }.bind(this));
       }
 
