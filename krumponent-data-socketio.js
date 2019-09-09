@@ -118,6 +118,49 @@ Polymer({
             }));
         }.bind(this));
 
+        this._socket.on('reconnect', function () {
+            this._status = "connected";
+            this._log(this._status);
+            this._subscribe();
+            this.dispatchEvent(new CustomEvent('socket-reconnected', {
+                bubbles: true,
+                composed: true,
+                detail: {
+                    path: this.path,
+                    status: this._status,
+                },
+            }));
+        }.bind(this));
+
+        this._socket.on('connect_error', function(err) {
+            this._status = "error";
+            this._log(this._status);
+            this.dispatchEvent(new CustomEvent('socket-connection-error', {
+                bubbles: true,
+                composed: true,
+                detail: {
+                    path: this.path,
+                    status: this._status,
+                    error: err,
+                },
+            }));
+        }.bind(this));
+
+        this._socket.on('connect_timeout', function (err) {
+            this._status = "error";
+            this._log(this._status, err);
+            console.log('error');
+            this.dispatchEvent(new CustomEvent('socket-connect-error', {
+                bubbles: true,
+                composed: true,
+                detail: {
+                    path: this.path,
+                    status: this._status,
+                    error: err,
+                },
+            }));
+        }.bind(this));
+
         this._socket.on('error', function (err) {
             this._status = "error";
             this._log(this._status, err);
